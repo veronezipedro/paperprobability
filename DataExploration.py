@@ -359,13 +359,3 @@ b.groupby(['university'])['time_publish'].mean().sort_values(ascending=False).to
 a.groupby(['university'])['time_publish'].mean().sort_values(ascending=False).to_csv('a_uni_mean.csv')
 
 b.university.value_counts()
-
-
-from bokeh.plotting import figure
-from bokeh.embed import notebook_div
-from bokeh.plotting import output_file, output_notebook
-
-plot = figure()
-plot.circle([1,2], [3,4])
-
-output_file()

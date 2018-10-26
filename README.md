@@ -11,3 +11,7 @@ The acceptance process can take a couple months or even years. Therefore, knowin
 In this study, we acquire data from published scientific research articles on the practice of management in two major scholarly journals, Manufacturing & Service Operation Management (MSOM) and Management and Science (MNSC). We investigate the important aspects of the papers such as the most common discussed topics, top authors and affiliations, and time for acceptance and publication, over the past 15 years.
 
 The main contribution is to provide high quality information that can assist researchers in the processes of selecting a target journal for publication and writing the paper according to the characteristics of the venue.
+
+For more [Data Exploration](https://veronezipedro.github.io/paperprobability/dataexploration.html)
+
+For the graphs used on this challenge, please access [Graph1](https://veronezipedro.github.io/paperprobability/graph1.html) or [Graph2](https://veronezipedro.github.io/paperprobability/graph2.html)

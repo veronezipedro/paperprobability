@@ -9,6 +9,7 @@ import itertools
 import networkx as nx
 import sys
 import re
+from collections import Counter
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -256,6 +257,37 @@ def change_affiliation(affiliations):
     return new_affiliation
 
 
+def get_word_count(astring):
+    """
+    
+    :param astring: 
+    :return: 
+    """
+    stopwords = set(STOPWORDS)
+    stopwords.add('Keywords')
+    stopwords.add('Keyword')
+    stopwords.add('model')
+    stopwords.add('models')
+    stopwords = [x.lower() for x in stopwords]
+    stopwords = list(stopwords)
+    alist = astring.lower().strip().split()
+    alist = [x for x in alist if x not in stopwords]
+    return Counter(alist).most_common(50)
+
+
+def func1(alist_of_tuples, item_to_check):
+    try:
+        return [x[1] for x in alist_of_tuples if x[0] == item_to_check][0]
+    except IndexError:
+        return np.nan
+
+
+def flatten_list_of_tuples(list_of_tuples):
+    list_fixed_words = []
+    for item in fixed_words:
+        list_fixed_words.append(item[0])
+    return list_fixed_words
+
 # Convert received, accepted, and published dates to datetime
 # MSOM journal
 df_msom['received_date'] = df_msom['received_date'].apply(convert_date)
@@ -286,6 +318,51 @@ df_mnsc['year_publish'] = df_mnsc['year_publish'].astype(int)
 # Get number of days for publication
 df_msom['time_publish'] = df_msom['time_publish'].dt.days
 df_mnsc['time_publish'] = df_mnsc['time_publish'].dt.days
+
+
+#### CREATE WORD FREQ
+df_mnsc['word_freq'] = df_mnsc['abstract'].apply(get_word_count)
+yearly_abs = df_mnsc.groupby(['year_publish'])['abstract'].apply(lambda x: ' '.join(x))
+yearly_abs = pd.DataFrame(yearly_abs)
+yearly_abs['word_count'] = yearly_abs['abstract'].apply(get_word_count)
+fixed_words = ' '.join(df_mnsc['abstract'].values)
+fixed_words = get_word_count(fixed_words)
+fixed_words_list = [x[0] for x in fixed_words]
+fixed_words_list.extend(['abstract'])
+
+
+for item in fixed_words:
+    df_mnsc[item[0]] = np.nan
+    df_mnsc[item[0]] = df_mnsc['word_freq'].apply(func1, args=(item[0], ))
+
+i = 0
+for item in fixed_words:
+    a = pd.DataFrame(df_mnsc[[item[0], 'year_publish']].groupby('year_publish').sum())
+    a.columns = ['freq_words']
+    b = pd.DataFrame(df_mnsc[[item[0], 'year_publish']].groupby('year_publish').count())
+    b.columns = ['number_of_papers']
+    a = pd.concat([a, b], axis=1)
+    a['words'] = item[0]
+    if i == 0:
+        c = a
+    else:
+        c = c.append(a)
+    i += 1
+
+c['freq_per_paper'] = c['freq_words'] / c['number_of_papers']
+c.fillna(0, inplace=True)
+
+c['year'] = c.index.values
+c = c[c['year'] != 1]
+c.reset_index(inplace=True)
+
+
+dataset = pd.DataFrame({'words': [],
+                        'year': [],
+                        'freq_word': [],
+                        'group': [],
+                        'number_of_papers': [],
+                        'freq_per_paper': []})
 
 # Get the average time for publication by
 df_msom.dropna().groupby(['year_publish'])['time_publish'].mean().sort_index()

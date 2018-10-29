@@ -14,4 +14,4 @@ The main contribution is to provide high quality information that can assist res
 
 For more [Data Exploration](https://veronezipedro.github.io/paperprobability/dataexploration.html)
 
-For the graphs used on this challenge, please access [Graph1](https://veronezipedro.github.io/paperprobability/Graph1.html) or [Graph2](https://veronezipedro.github.io/paperprobability/graph2.html)
+For the graphs used on this challenge, please access [Graph1](https://veronezipedro.github.io/paperprobability/Graph1.html) or [Graph2](https://veronezipedro.github.io/paperprobability/Graph2.html)

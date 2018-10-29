@@ -356,14 +356,6 @@ c['year'] = c.index.values
 c = c[c['year'] != 1]
 c.reset_index(inplace=True)
 
-
-dataset = pd.DataFrame({'words': [],
-                        'year': [],
-                        'freq_word': [],
-                        'group': [],
-                        'number_of_papers': [],
-                        'freq_per_paper': []})
-
 # Get the average time for publication by
 df_msom.dropna().groupby(['year_publish'])['time_publish'].mean().sort_index()
 df_mnsc.dropna().groupby(['year_publish'])['time_publish'].mean().sort_index()
